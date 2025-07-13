@@ -9,3 +9,10 @@ curl -X POST "http://localhost:8000/register" \
 '''
 
 ## 
+
+
+## 
+
+```bash
+uvicorn main:app --reload
+```
