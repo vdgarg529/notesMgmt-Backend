@@ -3,6 +3,18 @@ from typing import Optional
 import uuid
 from datetime import datetime
 
+# JWT
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+# Notes
+
 class NoteRequest(BaseModel):
     user_id: str
     text: str
