@@ -8,16 +8,11 @@ curl -X POST "http://localhost:8000/register" \
 }'
 ```
 
-<<<<<<< HEAD
-## 
+```cmd
+curl -X POST "http://localhost:8000/register" -H "Content-Type: application/json" -d "{\"email\":\"user2@example.com\", \"password\":\"password123\"}"
 
-
-## 
-
-```bash
-uvicorn main:app --reload
 ```
-=======
+
 ## login
 ``` bash
 curl -X POST "http://localhost:8000/login" \
@@ -26,6 +21,10 @@ curl -X POST "http://localhost:8000/login" \
   "email": "user@example.com",
   "password": "password123"
 }'
+```
+
+```cmd
+curl -X POST "http://localhost:8000/login" -H "Content-Type: application/json" -d "{\"email\":\"user@example.com\", \"password\":\"password123\"}"
 ```
 
 ## Create note
@@ -37,4 +36,7 @@ curl -X POST "http://localhost:8000/notes" \
   "title": "My First Note",
   "content": "Artificial intelligence is changing the world rapidly."
 }'
->>>>>>> 878df8cfa4ff65391d21dba202aa605303275d1f
+
+```cmd
+curl -X POST http://localhost:8000/notes/add -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d "{\"text\": \"Meeting with team at 3 PM\"}"
+```

@@ -16,7 +16,7 @@ class LoginRequest(BaseModel):
 # Notes
 
 class NoteRequest(BaseModel):
-    user_id: str
+    # user_id: str
     text: str
 
 class QueryRequest(BaseModel):

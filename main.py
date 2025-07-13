@@ -50,15 +50,16 @@ async def login(login_data: LoginRequest):
 # Notes creation
 
 @app.post("/notes/add")
-async def add_user_note(request: NoteRequest, user_id: str = Depends(get_current_user)):
+async def add_user_note(request: NoteRequest, current_user: User = Depends(get_current_user)):
     if not request.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty")
-    
-    note_id = add_note(request.user_id, request.text)
+    print(current_user)
+    # note_id = add_note(request.user_id, request.text)
+    note_id = add_note(current_user, request.text)
     return {
         "message": "Note added successfully",
         "note_id": note_id,
-        "user_id": request.user_id
+        "user_id": current_user
     }
 
 @app.post("/notes/query")
