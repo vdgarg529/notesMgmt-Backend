@@ -30,7 +30,34 @@ def add_note(user_id: str, text: str) -> str:
     )
     return metadata["id"]
 
-def query_notes(user_id: str, query: str, n_results: int = 5):
+# def query_notes(user_id: str, query: str, n_results: int = 5):
+#     collection = get_user_collection(user_id)
+#     query_embedding = get_embedding(query).tolist()
+    
+#     results = collection.query(
+#         query_embeddings=[query_embedding],
+#         n_results=n_results,
+#         include=["documents", "metadatas", "distances"]
+#     )
+    
+#     # Format results
+#     return [
+#         {
+#             "text": doc,
+#             "id": meta["id"],
+#             "timestamp": meta["timestamp"],
+#             "similarity": 1 - dist  # Convert distance to similarity
+#         }
+#         for doc, meta, dist in zip(
+#             results["documents"][0],
+#             results["metadatas"][0],
+#             results["distances"][0]
+#         )
+#     ]
+
+
+# Keep this function focused on vector DB queries
+def query_notes(user_id: str, query: str, n_results: int = 5) -> list[dict]:
     collection = get_user_collection(user_id)
     query_embedding = get_embedding(query).tolist()
     
@@ -40,13 +67,12 @@ def query_notes(user_id: str, query: str, n_results: int = 5):
         include=["documents", "metadatas", "distances"]
     )
     
-    # Format results
     return [
         {
             "text": doc,
             "id": meta["id"],
             "timestamp": meta["timestamp"],
-            "similarity": 1 - dist  # Convert distance to similarity
+            "similarity": 1 - dist
         }
         for doc, meta, dist in zip(
             results["documents"][0],
