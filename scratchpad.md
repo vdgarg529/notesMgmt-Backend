@@ -40,3 +40,9 @@ curl -X POST "http://localhost:8000/notes" \
 ```cmd
 curl -X POST http://localhost:8000/notes/add -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d "{\"text\": \"Meeting with team at 3 PM\"}"
 ```
+
+## Query Note
+
+```cmd
+curl -X POST http://localhost:8000/notes/query -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d "{\"query\": \"When Meeting\"}"
+```

@@ -12,6 +12,14 @@ from app.services.auth import (
 )
 import uuid
 
+
+from fastapi import HTTPException, Depends
+import asyncio
+from app.services.llm_utils import generate_summary  # Import from new module
+
+
+
+
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
@@ -62,19 +70,53 @@ async def add_user_note(request: NoteRequest, current_user: User = Depends(get_c
         "user_id": current_user
     }
 
+# @app.post("/notes/query")
+# async def query_user_notes(request: QueryRequest, current_user: User = Depends(get_current_user)):
+#     if not request.query.strip():
+#         raise HTTPException(status_code=400, detail="Query cannot be empty")
+    
+#     results = query_notes(current_user, request.query)
+#     if not results:
+#         return {"message": "No matching notes found", "results": []}
+    
+#     return {
+#         "message": f"Found {len(results)} results",
+#         "results": results
+#     }
+
+
+
 @app.post("/notes/query")
-async def query_user_notes(request: QueryRequest, user_id: str = Depends(get_current_user)):
+async def query_user_notes(request: QueryRequest, current_user: User = Depends(get_current_user)):
     if not request.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
     
-    results = query_notes(request.user_id, request.query)
+    # Get notes from vector DB (run in thread to avoid blocking)
+    results = await asyncio.to_thread(
+        query_notes, 
+        current_user, 
+        request.query
+    )
+    
     if not results:
-        return {"message": "No matching notes found", "results": []}
+        return {
+            "summary": "No matching notes found",
+            "results": []
+        }
+    
+    # Extract text content for summarization
+    note_texts = [res["text"] for res in results]
+    
+    # Generate summary asynchronously
+    summary = await generate_summary(note_texts)
     
     return {
-        "message": f"Found {len(results)} results",
-        "results": results
+        "summary": summary,
+        "results": results,
+        "count": len(results)
     }
+
+
 
 @app.get("/notes/check")
 async def check_user_notes(request: UserCheckRequest):

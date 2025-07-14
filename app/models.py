@@ -20,7 +20,6 @@ class NoteRequest(BaseModel):
     text: str
 
 class QueryRequest(BaseModel):
-    user_id: str
     query: str
 
 class UserCheckRequest(BaseModel):
