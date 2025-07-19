@@ -46,3 +46,4 @@ curl -X POST http://localhost:8000/notes/add -H "Authorization: Bearer <token>" 
 ```cmd
 curl -X POST http://localhost:8000/notes/query -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d "{\"query\": \"When Meeting\"}"
 ```
+

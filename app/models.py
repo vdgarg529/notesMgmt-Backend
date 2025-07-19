@@ -22,8 +22,8 @@ class NoteRequest(BaseModel):
 class QueryRequest(BaseModel):
     query: str
 
-class UserCheckRequest(BaseModel):
-    user_id: str
+# class UserCheckRequest(BaseModel):
+#     user_id: str
 
 class NoteMetadata(BaseModel):
     id: str = str(uuid.uuid4())
