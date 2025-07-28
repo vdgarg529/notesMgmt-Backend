@@ -33,3 +33,8 @@ class NoteMetadata(BaseModel):
 class DeleteNoteRequest(BaseModel):
     note_id: str
     
+
+# models.py - Add this new model
+class EditNoteRequest(BaseModel):
+    note_id: str
+    new_text: str
