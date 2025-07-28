@@ -142,8 +142,8 @@
 
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.models import RegisterRequest, LoginRequest, NoteRequest, QueryRequest
-from app.services.chroma_service import add_note, query_notes, has_notes, get_all_notes_chroma
+from app.models import RegisterRequest, LoginRequest, NoteRequest, QueryRequest, DeleteNoteRequest
+from app.services.chroma_service import add_note, query_notes, has_notes, get_all_notes_chroma, delete_note
 from app.services.db import SessionLocal, engine, User, Base
 import os
 from app.services.auth import (
@@ -264,6 +264,22 @@ async def get_all_notes(current_user: User = Depends(get_current_user)):
     except Exception as e:
         print(f"Error fetching all notes: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch notes: {str(e)}")
+
+
+@app.delete("/notes/delete")
+async def delete_user_note(
+    request: DeleteNoteRequest, 
+    current_user: User = Depends(get_current_user)
+):
+    user_id = current_user.id if hasattr(current_user, 'id') else str(current_user)
+    success = await asyncio.to_thread(delete_note, user_id, request.note_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Note not found")
+    return {"message": "Note deleted successfully"}
+
+
+
+
 
 @app.get("/health")
 def health_check():

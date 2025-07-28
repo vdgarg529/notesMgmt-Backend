@@ -29,3 +29,7 @@ class NoteMetadata(BaseModel):
     id: str = str(uuid.uuid4())
     timestamp: str = datetime.now().isoformat()
     text: str
+
+class DeleteNoteRequest(BaseModel):
+    note_id: str
+    

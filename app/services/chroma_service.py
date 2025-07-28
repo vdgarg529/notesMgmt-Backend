@@ -240,3 +240,13 @@ def get_all_notes_chroma(user_id: str) -> list[dict]:
         import traceback
         traceback.print_exc()
         return []
+
+
+def delete_note(user_id: str, note_id: str) -> bool:
+    try:
+        collection = get_user_collection(user_id)
+        collection.delete(ids=[note_id])
+        return True
+    except Exception as e:
+        print(f"Error deleting note: {e}")
+        return False
