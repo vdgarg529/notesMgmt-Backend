@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 import uuid
 from datetime import datetime
@@ -25,7 +25,22 @@ class QueryRequest(BaseModel):
 # class UserCheckRequest(BaseModel):
 #     user_id: str
 
+# class NoteMetadata(BaseModel):
+#     id: str = str(uuid.uuid4())
+#     timestamp: str = datetime.now().isoformat()
+#     text: str
+
 class NoteMetadata(BaseModel):
-    id: str = str(uuid.uuid4())
-    timestamp: str = datetime.now().isoformat()
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    timestamp: str = Field(default_factory=lambda: datetime.now().isoformat())
     text: str
+
+
+class DeleteNoteRequest(BaseModel):
+    note_id: str
+    
+
+# models.py - Add this new model
+class EditNoteRequest(BaseModel):
+    note_id: str
+    new_text: str
