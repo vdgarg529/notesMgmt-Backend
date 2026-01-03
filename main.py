@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.models import RegisterRequest, LoginRequest, NoteRequest, QueryRequest, DeleteNoteRequest, EditNoteRequest
-from app.services.chroma_service import add_note, query_notes, has_notes, get_all_notes_chroma, delete_note, edit_note
+from app.services.chroma_service import add_note, query_notes, has_notes, get_all_notes_chroma, delete_note, edit_note, count_note
 from app.services.db import SessionLocal, engine, User, Base
 import os
 from app.services.auth import (
@@ -240,6 +240,19 @@ async def edit_user_note(
         raise HTTPException(status_code=404, detail="Note not found")
     
     return {"message": "Note updated successfully"}
+
+@app.get("notes/count")
+async def count_user_note(
+    current_user : User = Depends(get_current_user)
+):
+    user_id = current_user.id if hasattr(current_user,'id') else str(current_user_user)
+
+    number_of_notes = count_note(user_id)
+    if not number_of_notes:
+        raise HTTPException(status_code=404, detail="Not Found")
+    return {"message":number_of_notes}
+
+
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
