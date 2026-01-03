@@ -7,7 +7,11 @@ from datetime import datetime
 # Persistent client setup
 chroma_client = chromadb.PersistentClient(
     path="./chroma_db",
+<<<<<<< HEAD
     settings=Settings(allow_reset=True, persist_directory="./chroma_db")
+=======
+    settings=Settings(allow_reset=True)
+>>>>>>> 36d4cad592ebe84dd3ddf7ff88904d87270a96c5
 )
 
 def get_user_collection(user_id: str):
@@ -18,16 +22,24 @@ def get_user_collection(user_id: str):
         embedding_function=None  # CRITICAL FIX
     )
 
+<<<<<<< HEAD
 
 def add_note(user_id: str, text: str) -> str:
     collection = get_user_collection(user_id)
     embedding = get_embedding(text).tolist()
     # Create metadata instance (will generate new ID/timestamp)
     metadata = NoteMetadata(text=text)  # Don't call .dict() here
+=======
+def add_note(user_id: str, text: str) -> str:
+    collection = get_user_collection(user_id)
+    embedding = get_embedding(text).tolist()  # Convert to list
+    metadata = NoteMetadata(text=text).dict()
+>>>>>>> 36d4cad592ebe84dd3ddf7ff88904d87270a96c5
     
     collection.add(
         documents=[text],
         embeddings=[embedding],
+<<<<<<< HEAD
         metadatas=[metadata.dict()],  # Call .dict() HERE
         ids=[metadata.id]
     )
@@ -63,6 +75,14 @@ def add_note(user_id: str, text: str) -> str:
 
 
 def query_notes(user_id: str, query: str) -> list[dict]:
+=======
+        metadatas=[metadata],
+        ids=[metadata["id"]]
+    )
+    return metadata["id"]
+
+def query_notes(user_id: str, query: str, n_results: int = 5) -> list[dict]:
+>>>>>>> 36d4cad592ebe84dd3ddf7ff88904d87270a96c5
     collection = get_user_collection(user_id)
     query_embedding = get_embedding(query).tolist()
     
